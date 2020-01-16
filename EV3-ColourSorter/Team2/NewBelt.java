@@ -21,18 +21,21 @@ public class NewBelt {
 
 	// Create a motor object to control the Medium Motor that is used as a servo
 	private static EV3MediumRegulatedMotor servoMotor;
+	
+	// Colour Sensor for reading colours
+	private static EV3ColorSensor ColorSensor;
 
 	public static void main(String[] args) {
 		// Create the instances
 		beltMotor = new UnregulatedMotor(MotorPort.B);
 		servoMotor = new EV3MediumRegulatedMotor(MotorPort.C);
+		
+		Port s2 = LocalEV3.get().getPort("S2");
+		ColorSensor = new EV3ColorSensor(s2);
 
-		EV3ColorSensor ColorSensor;
 		SampleProvider ColorProvider;
 		float[] ColorSample;
 
-		Port s2 = LocalEV3.get().getPort("S2");
-		ColorSensor = new EV3ColorSensor(s2);
 		// Colour sensor in mode of reading ID colours from the bricks
 		ColorProvider = ColorSensor.getColorIDMode();
 		ColorSample = new float[ColorProvider.sampleSize()];
@@ -59,7 +62,6 @@ public class NewBelt {
 			// Take 1 colour sample reading with  the Colour Sensor
 			ColorProvider.fetchSample(ColorSample, 0);
 			ColorSamples[0] = ColorSample[0];
-			// System.out.println(ColorSample[0]);
 			Delay.msDelay(100);
 
 			// Begin the colour examination procedure only if a colored
@@ -86,7 +88,7 @@ public class NewBelt {
 					// Make a sound when a coloured brick is read (5 matching reading samples)
 					Sound.beepSequence();
 
-					// demonstrate rotate to target angle without wait.
+					// demonstrate rotate to target angle without wait
 					servoMotor.resetTachoCount();
 				}
 
@@ -103,8 +105,8 @@ public class NewBelt {
 			}
 
 		}
-		// free up motor resources
-		beltMotor.stop();
+		// free up motor-sensor resources
+		FreeResources();
 
 	}
 
@@ -150,6 +152,15 @@ public class NewBelt {
 			}
 		}
 		return true;
+	}
+
+	private static void FreeResources() {
+		// Free up motor-sensor resources
+		beltMotor.stop();
+		beltMotor.close();
+		servoMotor.stop();
+		servoMotor.close();
+		ColorSensor.close();
 	}
 
 }
