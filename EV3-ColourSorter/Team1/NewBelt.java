@@ -19,7 +19,7 @@ public class NewBelt {
 	// Unregulated EV3 Large Motor for moving the belt
 	private static UnregulatedMotor beltMotor;
 
-	// Motor object for the hitting lever, 
+	// Motor object for the hitting lever,
 	// controls the Medium Motor used as servo
 	private static EV3MediumRegulatedMotor servoMotor;
 
@@ -30,7 +30,7 @@ public class NewBelt {
 		// Create the motor instances
 		beltMotor = new UnregulatedMotor(MotorPort.C);
 		servoMotor = new EV3MediumRegulatedMotor(MotorPort.D);
-		
+
 		Port s4 = LocalEV3.get().getPort("S4");
 		ColorSensor = new EV3ColorSensor(s4);
 
@@ -60,7 +60,7 @@ public class NewBelt {
 			}
 
 			// Start moving forward the belt at constant low power
-			driveBelt(25);
+			driveBelt(30);
 
 			// Take 1 colour sample reading with the Colour Sensor
 			ColorProvider.fetchSample(ColorSample, 0);
@@ -166,5 +166,4 @@ public class NewBelt {
 		servoMotor.close();
 		ColorSensor.close();
 	}
-
 }
